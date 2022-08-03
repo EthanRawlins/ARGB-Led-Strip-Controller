@@ -12,13 +12,15 @@ CRGB secondLeds[NUM_LEDS];
 
 DEFINE_GRADIENT_PALETTE (blue_purple) {
   0, 0, 66, 255, // blue
-  255, 255, 0, 255 // purple
+  128, 255, 0, 255, // purple
+  255, 0, 66, 255 // blue
 };
 CRGBPalette16 bluePurplePal = blue_purple;
 
 DEFINE_GRADIENT_PALETTE (blue_green) {
   0, 0, 66, 255, // blue
-  255, 0, 255, 0 // green
+  128, 0, 255, 0, // green
+  255, 0, 66, 255 // blue
 };
 CRGBPalette16 blueGreenPal = blue_green;
 
@@ -28,8 +30,8 @@ DEFINE_GRADIENT_PALETTE (white) {
 };
 CRGBPalette16 whitePal = white;
 
-int firstGradientIndex = 0; // Index for starting gradient color
-int secondGradientIndex = 123; // Index for second string of leds
+int firstGradientIndex = 110; // Index for starting gradient color
+int secondGradientIndex = 0; // Index for second string of leds
 #define GRADIENT_MOVE_SPEED 80 // speed (milliseconds) for how fast the color gradient moves
 
 void setup() {
@@ -54,7 +56,7 @@ void fillColor(CRGBPalette16 colorPal) {
     fill_palette(firstLeds, NUM_LEDS, firstGradientIndex, 255 / NUM_LEDS, colorPal, 255, LINEARBLEND);
     fill_palette(secondLeds, NUM_LEDS, secondGradientIndex, 255 / NUM_LEDS, colorPal, 255, LINEARBLEND);
     EVERY_N_MILLISECONDS(GRADIENT_MOVE_SPEED) {
-      firstGradientIndex++;
+      firstGradientIndex--;
       secondGradientIndex++;
     }
   FastLED.show();  
