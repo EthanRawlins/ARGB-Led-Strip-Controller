@@ -1,8 +1,4 @@
-//Ethan Rawlins Custom Neopixel Lightsaber Driver
-
-//sound/accelerometer logic credit goes to Brandon Sidle
-//I2C library credit goes to Jeff Rowberg
-//@ https://github.com/jrowberg/i2cdevlib
+//Ethan Rawlins Custom ARGB Led Strip Driver
 
 // FastLed is required for use of neopixel led strip.
 #include <FastLED.h>
@@ -19,13 +15,26 @@ DEFINE_GRADIENT_PALETTE (blue_purple) {
   255, 255, 0, 255 // purple
 };
 CRGBPalette16 bluePurplePal = blue_purple;
+
+DEFINE_GRADIENT_PALETTE (blue_green) {
+  0, 0, 66, 255, // blue
+  255, 0, 255, 0 // green
+};
+CRGBPalette16 blueGreenPal = blue_green;
+
+DEFINE_GRADIENT_PALETTE (white) {
+  0, 255, 255, 200, // white
+  255, 255, 255, 200 // white
+};
+CRGBPalette16 whitePal = white;
+
 int firstGradientIndex = 0; // Index for starting gradient color
-int secondGradientIndex = 145; // Index for second string of leds
-#define GRADIENT_MOVE_SPEED 80 // speed (milliseconds) for how fast the color gradient moves on the blade when bladeFillType = 2
+int secondGradientIndex = 123; // Index for second string of leds
+#define GRADIENT_MOVE_SPEED 80 // speed (milliseconds) for how fast the color gradient moves
 
 void setup() {
 // initialize serial communication
-  Serial.begin(38400);
+  Serial.begin(9600);
  
 // configure fastLED
   FastLED.addLeds<WS2812B, LED_DATA_PIN, GRB>(firstLeds, NUM_LEDS);
@@ -36,10 +45,14 @@ void setup() {
 }
 
 void loop() {
-  
+  fillColor(bluePurplePal);
+  FastLED.show();
+}
+
+void fillColor(CRGBPalette16 colorPal) {
 // moving gradient color fill
-    fill_palette(firstLeds, NUM_LEDS, firstGradientIndex, 255 / NUM_LEDS, bluePurplePal, 255, LINEARBLEND);
-    fill_palette(secondLeds, NUM_LEDS, secondGradientIndex, 255 / NUM_LEDS, bluePurplePal, 255, LINEARBLEND);
+    fill_palette(firstLeds, NUM_LEDS, firstGradientIndex, 255 / NUM_LEDS, colorPal, 255, LINEARBLEND);
+    fill_palette(secondLeds, NUM_LEDS, secondGradientIndex, 255 / NUM_LEDS, colorPal, 255, LINEARBLEND);
     EVERY_N_MILLISECONDS(GRADIENT_MOVE_SPEED) {
       firstGradientIndex++;
       secondGradientIndex++;
